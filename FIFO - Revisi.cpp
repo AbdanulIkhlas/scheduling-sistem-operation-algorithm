@@ -1,32 +1,34 @@
-#include <stdio.h>
-#include <string.h>
+#include <iostream>
+#include <iomanip>
+#include <string>
+using namespace std;
 
 int main() {
     int n, ar[100], b[100], i, j, tmp, wt[100], ta[100], time[100];
     int totWT = 0, totTA = 0;
     float AvWT, AvTA;
-    char name[20][20], tmpName[20];
+    string name[20], tmpName;
 
-    printf("+-------------------------------------+\n");
-    printf("| Nama    : Muhammad Abdanul Ikhlas   |\n");
-    printf("| NIM     : 123210009                 |\n");
-    printf("| Kelas   : IF - C                    |\n");
-    printf("+-------------------------------------+\n");
+    cout << "+-------------------------------------+" << endl;
+    cout << "| Nama    : Muhammad Abdanul Ikhlas   |" << endl;
+    cout << "| NIM     : 123210009                 |" << endl;
+    cout << "| Kelas   : IF - C                    |" << endl;
+    cout << "+-------------------------------------+" << endl;
 
-    printf("Program Penjadwalan CPU FIFO\n\n");
-    printf("Banyak Proses = ");
-    scanf("%d", &n);
-    printf("\n");
+    cout << endl << "   Program Penjadwalan CPU FIFO" << endl << endl;
+    cout << "Banyak Proses = ";
+    cin >> n;
+    cout << endl;
 
     for (i = 0; i < n; i++) {
-        fflush(stdin);
-        printf("Nama Proses   = ");
-        gets(name[i]);
-        printf("Arrival time  = ");
-        scanf("%d", &ar[i]);
-        printf("Burst time    = ");
-        scanf("%d", &b[i]);
-        printf("\n");
+        cin.ignore(); // Membersihkan newline sebelumnya
+        cout << "Nama Proses   = ";
+        getline(cin, name[i]);
+        cout << "Arrival time  = ";
+        cin >> ar[i];
+        cout << "Burst time    = ";
+        cin >> b[i];
+        cout << endl;
     }
 
     // SORTING Data berdasarkan arrival time
@@ -34,9 +36,9 @@ int main() {
         for (j = i + 1; j < n; j++) {
             if (ar[i] > ar[j]) {
                 // Tukar nama
-                strcpy(tmpName, name[i]);
-                strcpy(name[i], name[j]);
-                strcpy(name[j], tmpName);
+                tmpName = name[i];
+                name[i] = name[j];
+                name[j] = tmpName;
 
                 // Tukar arrival time
                 tmp = ar[i];
@@ -52,58 +54,57 @@ int main() {
     }
 
     time[0] = ar[0];
-    
-    printf("-------------- Process Table -------------\n");
-    printf("==========================================\n");
-    printf("| no | proses\t | time arrival\t | burst |\n");
-    printf("==========================================\n");
+    cout << "--------------------- PROSES TABEL ------------------------"<<endl;
+    cout << "+----------------------------------------------------------+" << endl;
+    cout << left << setw(5) << "| NO" << setw(16) << "|       PROSES   "  << setw(20) << "|    time arrival  " << setw(14) << "|      burst     |" << endl;
+    cout << "+----------------------------------------------------------+" << endl;
 
     for (i = 0; i < n; i++) {
-        printf("| %2d | %s\t |  \t%d\t | %d\t |\n", i + 1, name[i], ar[i], b[i]);
+        cout << left << setw(2) << "|  " << i + 1  << " |       " << setw(8) << name[i] << " |        " << setw(10) << ar[i]  << " |        " << setw(7) << b[i] << " |" << endl;
         time[i + 1] = time[i] + b[i];
         wt[i] = time[i] - ar[i];
         ta[i] = time[i + 1] - ar[i];
         totWT += wt[i];
         totTA += ta[i];
     }
+    cout << "+----------------------------------------------------------+" << endl << endl;
 
-    printf("==========================================\n\n");
-    printf("\tTotal waiting time\t= %d \n", totWT);
-    printf("\tTurn around time\t= %d \n\n", totTA);
+    cout << "\tTotal waiting time\t= " << totWT << endl;
+    cout << "\tTurn around time\t= " << totTA << endl << endl;
 
-    printf("---------------- Time Process Table --------------\n");
-    printf("==================================================\n");
-    printf("| no | proses\t | waiting time\t | turn around\t |\n");
-    printf("==================================================\n");
+    cout <<"\n-------------------- TIME PROSES TABEL ------------------- " <<endl;
+    cout << "+----------------------------------------------------------+" << endl;
+    cout << "| NO |      PROSES     |    WAITING TIME   |  TURN AROUND  |" << endl;
+    cout << "+----------------------------------------------------------+" << endl;
 
     for (i = 0; i < n; i++) {
-        printf("| %2d | %s\t |  \t%d\t | \t%d\t |\n", i + 1, name[i], wt[i], ta[i]);
+        cout << left << "| " << setw(2) << i + 1  << " |        " << setw(8) << name[i] << " |          " << setw(9) << wt[i] << "|        " << setw(7) << ta[i] << "|" << endl;
     }
 
-    printf("==================================================\n\n");
+    cout << "+----------------------------------------------------------+" << endl << endl;
 
-    printf("-------------------- Gantt Chart -------------------\n");
+    cout << endl <<"---------------------- Gantt Chart -----------------------" << endl;
     
     for (i = 0; i < n; i++) {
-        printf("%s         ", name[i]);
+        cout << name[i] << "         ";
     }
-    printf("\n");
+    cout << endl;
     
     for (i = 0; i < n; i++) {
-        printf("|=========");
+        cout << "|=========";
     }
-    printf("|\n");
+    cout << "|" << endl;
     
     for (i = 0; i <= n; i++) {
-        printf("%d         ", time[i]);
+        cout << time[i] << "         ";
     }
     
-    printf("\n\ndiperoleh dari penjumlahan Burst\n\n");
+    cout << endl << endl;
     
     AvWT = (float)totWT / n; // Rata-rata waiting time
     AvTA = (float)totTA / n; // Rata-rata turn around time
-    printf("\tAverage Waiting Time : %f\n", AvWT);
-    printf("\tAverage Turn Around Time : %f\n", AvTA);
+    cout << "\tAverage Waiting Time : " << AvWT << endl;
+    cout << "\tAverage Turn Around Time : " << AvTA << endl;
 
     return 0;
 }
